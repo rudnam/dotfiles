@@ -1,0 +1,8 @@
+# SSH
+home/.ssh/id_*
+home/.ssh/*.pem
+home/.ssh/*.key
+home/.ssh/known_hosts
+
+# Logs
+*.log
