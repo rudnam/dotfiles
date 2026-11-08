@@ -120,8 +120,19 @@ fi
 # User configuration
 # =========================================
 
-export JAVA_HOME="$HOME/.jdks/temurin-21.0.8"
+# The newest JDK 21 in ~/.jdks (the Android build needs 21).
+JAVA_HOME=$(ls -d "$HOME"/.jdks/temurin-21.* 2>/dev/null | sort -V | tail -1)
+export JAVA_HOME
 export PATH=$JAVA_HOME/bin:$PATH
+
+# Android SDK (rudwallet's android/build.sh and Gradle read ANDROID_HOME);
+# platform-tools has adb.
+if [ -d "$HOME/Android/Sdk" ]; then
+  export ANDROID_HOME="$HOME/Android/Sdk"
+elif [ -d "$HOME/.bubblewrap/android_sdk" ]; then
+  export ANDROID_HOME="$HOME/.bubblewrap/android_sdk"
+fi
+[ -n "$ANDROID_HOME" ] && export PATH="$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -129,3 +140,4 @@ export NVM_DIR="$HOME/.nvm"
 
 export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:$(go env GOPATH)/bin"
+export PATH="$HOME/.local/bin:$PATH"
